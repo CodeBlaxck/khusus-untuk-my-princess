@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Morning Note for My Girl</title>
+    <style>
+        /* Import font klasik */
+        @import url('https://googleapis.com');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #f2ebd9; /* Warna kertas koran tua */
+            background-image: radial-gradient(#e6dab8 1px, transparent 0);
+            background-size: 24px 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            font-family: 'Special Elite', monospace;
+            padding: 20px 0;
+            overflow-x: hidden;
+        }
+
+        /* AREA BUKU 3D */
+        .book-container {
+            perspective: 1500px; /* Efek kedalaman 3D */
+            width: 90%;
+            max-width: 380px;
+            height: 580px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .book {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+        }
+
+        /* STYLE UMUM HALAMAN BUKU */
+        .page {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            background: #fdfbf7;
+            border: 2px solid #4a3b32;
+            padding: 40px 25px;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.1);
+            transform-origin: left center; /* Poros tekukan kertas di sebelah kiri */
+            transition: transform 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            backface-visibility: hidden; /* Menyembunyikan konten belakang halaman */
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* Mengatur tumpukan awal halaman (Slide 1 paling atas, Slide 4 paling bawah) */
+        #page1 { z-index: 4; border-left: 12px solid #4a3b32; box-shadow: 8px 8px 0px #4a3b32; }
+        #page2 { z-index: 3; border-left: 6px solid #a89076; }
+        #page3 { z-index: 2; border-left: 6px solid #a89076; }
+        #page4 { z-index: 1; border-left: 6px solid #a89076; }
+
+        /* KELAS CSS UNTUK HALAMAN YANG SUDAH DIBALIK (DIBUKA KE KIRI) */
+        .page.flipped {
+            transform: rotateY(-145deg);
+            box-shadow: -5px 5px 15px rgba(0,0,0,0.05);
+        }
+
+        /* KONTEN TEKS & JUDUL */
+        .content-wrap {
+            width: 100%;
+            margin: auto 0;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.3rem;
+            color: #2b221a;
+            margin-bottom: 20px;
+            font-style: italic;
+            text-shadow: 2px 2px 0px #e6dab8;
+        }
+
+        h2 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #2b221a;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: #3b3028;
+            line-height: 1.6;
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        /* TOMBOL NAVIGASI JURNAL */
+        .vintage-btn {
+            background-color: #4a3b32;
+            color: #f2ebd9;
+            border: none;
+            padding: 14px 28px;
+            font-family: 'Special Elite', monospace;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 4px 4px 0px #a89076;
+            border-radius: 4px;
+            transition: all 0.2s;
+            width: 90%;
+            margin-top: auto;
+        }
+
+        .vintage-btn:active {
+            transform: translate(2px, 2px);
+            box-shadow: 2px 2px 0px #a89076;
+        }
+
+        /* BINGKAI FOTO POLAROID VINTAGE */
+        .photo-frame {
+            background: #ffffff;
+            padding: 12px 12px 25px 12px;
+            border: 1px solid #c2b29a;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.12);
+            transform: rotate(-2deg);
+            margin: 15px auto;
+            max-width: 220px;
+        }
+
+        .photo-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+            filter: sepia(15%) contrast(95%);
+        }
+
+        .signature {
+            text-align: right;
+            font-family: 'Playfair Display', serif;
+            font-style: italic;
+            font-weight: bold;
+            width: 100%;
+            margin-top: 15px;
+            color: #4a3b32;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Elemen Musik Backsound -->
+    <audio id="bgMusic" loop>
+        <source src="kesya.mp3" type="audio/mpeg">
+    </audio>
+
+    <div class="book-container">
+        <div class="book">
+            
+            <!-- SLIDE 1: SAMPUL DEPAN BUKU -->
+            <div class="page" id="page1">
+                <div class="content-wrap" style="margin-top: 50px;">
+                    <h1>Morningg, Babyyy!</h1>
+                    <p style="text-align: center; color: #5c4d41; font-style: italic;">"I really hope you wake up with a smile on your face today. Please open this for me, love! ✨"</p>
+                </div>
+                <button class="vintage-btn" onclick="bukaHalaman(1)">Open This Journal ✨</button>
+            </div>
+
+            <!-- SLIDE 2: FOTO PACAR -->
+            <div class="page" id="page2">
+                <div class="content-wrap">
+                    <h2>My Favorite Person</h2>
+                    <div class="photo-frame">
+                        <!-- PENTING: Pastikan file fotomu dinamai "foto-kamu.jpg" dalam satu folder -->
+                        <img src="foto-kamu.jpg" alt="My Princes">
+                    </div>
+                </div>
+                <button class="vintage-btn" onclick="bukaHalaman(2)">Next Slide, Please →</button>
+            </div>
+
+            <!-- SLIDE 3: SURAT RAHASIA BAGIAN 1 (MINTA MAAF GENTLE) -->
+            <div class="page" id="page3">
+                <div class="content-wrap" style="margin-top: 10px;">
+                    <h2>I'm Really Sorry</h2>
+                    <p>Good morning, sayang! Pertama-tama, aku mau minta maaf ya buat semalem. Aku bener-bener gak ada niat bikin kamu kesel atau sedih sama sekali.</p>
+                    <p>Aku harap pagi ini mood kamu udah jauh lebih baik. Jangan biarin masalah semalem ngerusak mood kamu buat sekolah hari ini ya. Tetep semangat belajarnya!</p>
+                </div>
+                <button class="vintage-btn" onclick="bukaHalaman(3)">Last Slide →</button>
+            </div>
+
+            <!-- SLIDE 4: SURAT RAHASIA BAGIAN 2 (HALAMAN AKHIR) -->
+            <div class="page" id="page4">
+                <div class="content-wrap" style="margin-top: 40px;">
+                    <h2>Always Here For You</h2>
+                    <p>Gak usah pusingin yang kemarin lagi, everything is fine. Fokus sekolah hari ini, dengerin penjelasan guru, dan jangan lupa istirahat pas jam istirahat nanti.</p>
+                    <p>I love You❤️</p>
+                    <div class="signature">- Your Favorite Person</div>
+                </div>
+                <button class="vintage-btn" style="background-color: #a89076;" onclick="tutupBuku()">Read Again ↺</button>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function bukaHalaman(nomorHalaman) {
+            // Putar musik otomatis saat halaman pertama dibuka
+            if (nomorHalaman === 1) {
+                const lagu = document.getElementById("bgMusic");
+                lagu.play().catch(err => console.log("Musik butuh izin aktif"));
+            }
+
+            // Tambahkan efek flip pada halaman
+            const halaman = document.getElementById("page" + nomorHalaman);
+            halaman.classList.add("flipped");
+        }
+
+        function tutupBuku() {
+            for (let i = 1; i <= 3; i++) {
+                document.getElementById("page" + i).classList.remove("flipped");
+            }
+        }
+    </script>
+</body>
+</html>
